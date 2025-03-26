@@ -1,7 +1,15 @@
 ---
 BasedOnStyle: LLVM
-IndentWidth: 4
+AlignAfterOpenBracket: BlockIndent
+AllowShortBlocksOnASingleLine: Always
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+BreakTemplateDeclarations: Yes
 IndentCaseBlocks: true
 IndentCaseLabels: true
+IndentWidth: 4
+InsertNewlineAtEOF: true
+IndentPPDirectives: BeforeHash
 PointerAlignment: Left
+UseTab: Never
 ---
