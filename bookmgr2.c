@@ -1,8 +1,6 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-
-// 结构体定义
 
 typedef struct {
     char isbn[14];
@@ -15,14 +13,14 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
-// 链表操作
-
+// 初始化链表
 Node* InitList() {
     Node* node = (Node*)calloc(1, sizeof(Node));
     node->next = NULL;
     return node;
 }
 
+// 释放链表
 void DestroyList(Node* head) {
     for (Node* node = head->next; node != NULL; node = node->next) {
         free(node->book.name);
@@ -30,6 +28,7 @@ void DestroyList(Node* head) {
     }
 }
 
+// 在链表头部添加一个节点
 void AppendNode(Node* head, Book* book) {
     Node* new_node = (Node*)calloc(1, sizeof(Node));
     memcpy(&new_node->book, book, sizeof(Book));
@@ -37,6 +36,7 @@ void AppendNode(Node* head, Book* book) {
     head->next = new_node;
 }
 
+// 删除一个特定的节点
 void DeleteNode(Node* head, char* isbn) {
     if (head->next->next == NULL) {
         Node* node = head->next;
@@ -60,12 +60,14 @@ void DeleteNode(Node* head, char* isbn) {
     printf("ERROR: book not found\n");
 }
 
+// 打印一个节点
 void PrintNode(Node* node) {
-    printf("%s ", node->book.isbn);
-    printf("\"%s\" ", node->book.name);
-    printf("%.2f", node->book.price);
+    printf(
+        "%s \"%s\" %.2f", node->book.isbn, node->book.name, node->book.price
+    );
 }
 
+// 打印帮助
 void PrintHelp() {
     printf("Show this help:  help\n");
     printf("Add a book:      add\n");
@@ -76,6 +78,7 @@ void PrintHelp() {
     printf("Exit system:     exit\n");
 }
 
+// 添加一本书（包括数据合法性检查）
 void AddBook(Node* head) {
     Book book;
     book.name = (char*)calloc(1024, sizeof(char));
@@ -106,6 +109,7 @@ void AddBook(Node* head) {
     AppendNode(head, &book);
 }
 
+// 打印所有图书信息
 void PrintAllBook(Node* head) {
     size_t count = 1;
     for (Node* now = head->next; now != NULL; now = now->next) {
@@ -116,6 +120,7 @@ void PrintAllBook(Node* head) {
     }
 }
 
+// 寻找一本符合名称的书
 void FindBook(Node* head, char* name) {
     size_t count = 0;
     for (Node* now = head->next; now != NULL; now = now->next) {
@@ -128,6 +133,7 @@ void FindBook(Node* head, char* name) {
     }
 }
 
+// 将书按照名称/价格排序
 void SortBook(Node* head, char* cmd) {
     if (strlen(cmd) < 2) {
         printf("ERROR: command format error\n");
@@ -161,9 +167,11 @@ void SortBook(Node* head, char* cmd) {
         Node* prev = head->next;
         for (Node* now = prev->next; now != NULL; now = now->next) {
             int should_swap = 0;
-            if (which == 1 && strcmp(prev->book.name, now->book.name) * coeff > 0) {
+            if (which == 1 &&
+                strcmp(prev->book.name, now->book.name) * coeff > 0) {
                 should_swap = 1;
-            } else if (which == 2 && coeff * (prev->book.price - now->book.price) > 0){
+            } else if (which == 2 &&
+                       coeff * (prev->book.price - now->book.price) > 0) {
                 should_swap = 1;
             }
             if (should_swap) {
@@ -178,6 +186,7 @@ void SortBook(Node* head, char* cmd) {
     }
 }
 
+// 主循环
 void CmdLoop(Node* head) {
     char* cmd = calloc(1024, sizeof(char));
     while (1) {
