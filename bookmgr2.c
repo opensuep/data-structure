@@ -139,8 +139,7 @@ void SortBook(Node* head, char* cmd) {
         printf("ERROR: command format error\n");
         return;
     }
-    int coeff = 1;
-    int which = 0;
+    int coeff = 1, which = 0;
     if (cmd[0] == '+') {
         coeff = 1;
     } else if (cmd[0] == '-') {
