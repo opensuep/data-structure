@@ -57,13 +57,40 @@ int BTreeDepth(BTree t) {
 }
 
 // 计算叶子节点的个数
-int BTreeCountNode(BTree t) {
+int BTreeCountLeafNode(BTree t) {
     if (!t) {
         return 0;
     } else if (!t->lchild && !t->rchild) {
         return 1;
+    } else {
+        return BTreeCountLeafNode(t->lchild) + BTreeCountLeafNode(t->rchild);
     }
-    return BTreeCountNode(t->lchild) + BTreeCountNode(t->rchild);
+}
+
+// 计算度为 1 的节点个数
+int BTreeCountDegreeOneNode(BTree t) {
+    if (!t) {
+        return 0;
+    } else if ((t->lchild && !t->rchild) || (!t->lchild && t->rchild)) {
+        return 1 + BTreeCountDegreeOneNode(t->lchild) +
+               BTreeCountDegreeOneNode(t->rchild);
+    } else {
+        return BTreeCountDegreeOneNode(t->lchild) +
+               BTreeCountDegreeOneNode(t->rchild);
+    }
+}
+
+// 计算度为 2 的节点个数
+int BTreeCountDegreeTwoNode(BTree t) {
+    if (!t) {
+        return 0;
+    } else if (t->lchild && t->rchild) {
+        return 1 + BTreeCountDegreeTwoNode(t->lchild) +
+               BTreeCountDegreeTwoNode(t->rchild);
+    } else {
+        return BTreeCountDegreeTwoNode(t->lchild) +
+               BTreeCountDegreeTwoNode(t->rchild);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -75,7 +102,11 @@ int main(int argc, char** argv) {
     printf("Post-order: ");
     BTreePostOrderTraverse(tree);
     puts("");
-    printf("Depth: %d\nNode: %d\n", BTreeDepth(tree), BTreeCountNode(tree));
+    printf("Depth: %d\nLeaf node: %d\n", BTreeDepth(tree), BTreeCountLeafNode(tree));
+    printf(
+        "Degree: {1: %d, 2: %d}\n", BTreeCountDegreeOneNode(tree),
+        BTreeCountDegreeTwoNode(tree)
+    );
     DestroyBTree(tree);
     return 0;
 }
